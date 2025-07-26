@@ -36,6 +36,7 @@ Explore Devsync IDE in action here:
 ### Clone the repository:
 ```bash
 git clone https://github.com/alexmueller07/devsync-ide.git
+```
 
 ## Author
 
