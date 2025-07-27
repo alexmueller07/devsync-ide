@@ -42,8 +42,10 @@ export default function CodeEditor({
   const decorationsRef = useRef<string[]>([]);
 
   useEffect(() => {
-    // Subscribe to active users in this file
-    const unsubscribe = onSnapshot(
+    if (!currentUser || !fileId) return;
+
+    // === Active Users Listener ===
+    const activeUsersUnsubscribe = onSnapshot(
       collection(db, `files/${fileId}/activeUsers`),
       (snapshot) => {
         const users: User[] = [];
@@ -57,87 +59,69 @@ export default function CodeEditor({
       }
     );
 
-    // Add current user to active users
+    // Add or update current user in Firestore
     const userRef = doc(db, `files/${fileId}/activeUsers`, currentUser.id);
     const userData: any = {
       id: currentUser.id,
       name: currentUser.name,
       email: currentUser.email,
-      lastSeen: serverTimestamp()
+      lastSeen: serverTimestamp(),
     };
-    
-    // Only add photoURL if it exists
     if (currentUser.photoURL) {
       userData.photoURL = currentUser.photoURL;
     }
 
-    // Check if document exists first
     getDoc(userRef).then((docSnap) => {
       if (docSnap.exists()) {
-        // Update existing document
-        updateDoc(userRef, {
-          lastSeen: serverTimestamp()
-        });
+        updateDoc(userRef, { lastSeen: serverTimestamp() });
       } else {
-        // Create new document
         setDoc(userRef, userData);
       }
     });
 
+    // Cleanup on unmount
     return () => {
-      unsubscribe();
-      // Remove user from active users when component unmounts
+      activeUsersUnsubscribe();
       updateDoc(userRef, {
-        lastSeen: serverTimestamp()
-      }).catch(() => {
-        // Ignore errors when removing user
-      });
+        lastSeen: serverTimestamp(),
+      }).catch(() => {});
     };
   }, [fileId, currentUser]);
 
   const handleEditorDidMount = (editor: any) => {
     editorRef.current = editor;
 
-    // Set up cursor position tracking
     editor.onDidChangeCursorPosition((e: any) => {
       const position = e.position;
       const userRef = doc(db, `files/${fileId}/activeUsers`, currentUser.id);
       updateDoc(userRef, {
         cursor: {
           lineNumber: position.lineNumber,
-          column: position.column
+          column: position.column,
         },
-        lastSeen: serverTimestamp()
-      }).catch(() => {
-        // Ignore errors when updating cursor position
-      });
-    });
-
-    // Remove cursor tracking on model content changes
-    editor.onDidChangeModelContent(() => {
-      // Don't update cursor position on content changes
+        lastSeen: serverTimestamp(),
+      }).catch(() => {});
     });
   };
 
   useEffect(() => {
     if (!editorRef.current) return;
 
-    // Update cursor decorations for other users
     const decorations = activeUsers.map(user => ({
       range: {
         startLineNumber: user.cursor?.lineNumber || 1,
         startColumn: user.cursor?.column || 1,
         endLineNumber: user.cursor?.lineNumber || 1,
-        endColumn: user.cursor?.column || 1
+        endColumn: user.cursor?.column || 1,
       },
       options: {
         className: `cursor-${user.id}`,
         hoverMessage: { value: user.name },
         before: {
           content: '👤',
-          inlineClassName: 'cursor-avatar'
-        }
-      }
+          inlineClassName: 'cursor-avatar',
+        },
+      },
     }));
 
     decorationsRef.current = editorRef.current.deltaDecorations(
@@ -295,7 +279,7 @@ export default function CodeEditor({
               horizontal: 'visible',
               useShadows: false,
               verticalScrollbarSize: 10,
-              horizontalScrollbarSize: 10
+              horizontalScrollbarSize: 10,
             }
           }}
         />
@@ -315,13 +299,13 @@ export default function CodeEditor({
               margin-left: -1px;
               animation: blink 1s step-end infinite;
             }
-            @keyframes blink {
-              0%, 100% { opacity: 1; }
-              50% { opacity: 0; }
-            }
           `).join('\n')}
+          @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+          }
         `}
       </style>
     </Paper>
   );
-} 
+}
