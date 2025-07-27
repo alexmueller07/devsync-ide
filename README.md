@@ -22,11 +22,11 @@ Explore Devsync IDE in action here:
 
 ---
 
-<img width="940" height="530" alt="Screenshot 2025-07-27 102338" src="https://github.com/user-attachments/assets/d773f66c-29d3-43b5-9398-41f0029c2d42" />
-<img width="940" height="530" alt="Screenshot 2025-07-27 102355" src="https://github.com/user-attachments/assets/26a2c839-7d57-494c-ae62-a7f75d97efe3" />
+<img width="470" height="265" alt="Screenshot 2025-07-27 102338" src="https://github.com/user-attachments/assets/d773f66c-29d3-43b5-9398-41f0029c2d42" />
+<img width="470" height="265" alt="Screenshot 2025-07-27 102355" src="https://github.com/user-attachments/assets/26a2c839-7d57-494c-ae62-a7f75d97efe3" />
 
-<img width="940" height="530" alt="Screenshot 2025-07-27 102426" src="https://github.com/user-attachments/assets/a54e8ebb-f750-45ad-bdd9-cc0c1cec33d8" />
-<img width="940" height="530" alt="Screenshot 2025-07-27 103141" src="https://github.com/user-attachments/assets/1c051c0c-8353-47e4-a318-ada805a72ea7" />
+<img width="470" height="265" alt="Screenshot 2025-07-27 102426" src="https://github.com/user-attachments/assets/a54e8ebb-f750-45ad-bdd9-cc0c1cec33d8" />
+<img width="470" height="265" alt="Screenshot 2025-07-27 103141" src="https://github.com/user-attachments/assets/1c051c0c-8353-47e4-a318-ada805a72ea7" />
 
 ---
 
